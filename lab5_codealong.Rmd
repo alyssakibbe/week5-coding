@@ -1,0 +1,58 @@
+---
+title: "lab5_code_along"
+author: "Alyssa Kibbe"
+date: "11/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+library(effsize)
+library(broom)
+library(ggbeeswarm)
+library(car)
+```
+
+# Part 1. t-test
+### do we have enough evidence to show that they are from populations of different means
+Mass comparision: male & female chinstrap penguins
+
+```{r}
+chinstrap <- penguins %>% 
+  filter(species == "Chinstrap")
+
+# histograms
+ggplot(data = chinstrap, aes(x = body_mass_g))+
+  geom_histogram(bins = 10) +
+  facet_wrap(~sex)
+
+#QQ-plot
+ggplot(data = chinstrap, aes(sample = body_mass_g))+
+  geom_qq()+
+  facet_wrap(~sex)
+
+# distriptive stastistics
+chinstrap %>% 
+  group_by(sex) %>% 
+  summarize(
+    mean_mass = mean(body_mass_g),
+    median_mass = median(body_mass_g),
+    sd_mass = sd(body_mass_g),
+    sample_size = n()
+  )
+
+
+```
+##### look mostly normal, mean would be reasonable. QQ plot shows they are very straight which means that its pretty normal. 
+
+
+
+
+
+
+
+
+
+
