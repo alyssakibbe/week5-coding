@@ -47,9 +47,38 @@ chinstrap %>%
 ```
 ##### look mostly normal, mean would be reasonable. QQ plot shows they are very straight which means that its pretty normal. 
 
+## now to compare sizes
+# Get vectors of body_mass_g for female and male chinstrap penguins separately. 
+```{r}
+chinstrap_f <- chinstrap %>% 
+  filter(sex == "female") %>% 
+  pull(body_mass_g)
 
+chinstrap_m <- chinstrap %>% 
+  filter(sex == "male") %>% 
+  pull(body_mass_g)
+```
 
+### run t-test in a couple diff ways
 
+1. is there a significant difference in body mass between male and female chinstrap penguins? (two-sided)
+
+```{r}
+chinstrap_ttest <- t.test(chinstrap_f, chinstrap_m)
+chinstrap_ttest
+
+cohen.d(chinstrap_f, chinstrap_m)
+
+```
+### tiny p-value means that there is a very tiny chance that means are from the same mean populations. there is a significant difference between male and female chinstrap penguins.
+
+#### cohen's d shows large effect size
+
+are male chinstrap penguins significantly larger (body mass) than females (one-tailed)?
+
+```{r}
+t.test(chinstrap_m, chinstrap_f, alternative = "greater")
+```
 
 
 

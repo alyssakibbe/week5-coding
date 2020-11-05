@@ -406,6 +406,65 @@ chinstrap %&gt;%
 <h5>look mostly normal, mean would be reasonable. QQ plot shows they are very straight which means that its pretty normal.</h5>
 </div>
 </div>
+<div id="now-to-compare-sizes" class="section level2">
+<h2>now to compare sizes</h2>
+</div>
+</div>
+<div id="get-vectors-of-body_mass_g-for-female-and-male-chinstrap-penguins-separately." class="section level1">
+<h1>Get vectors of body_mass_g for female and male chinstrap penguins separately.</h1>
+<pre class="r"><code>chinstrap_f &lt;- chinstrap %&gt;% 
+  filter(sex == &quot;female&quot;) %&gt;% 
+  pull(body_mass_g)
+
+chinstrap_m &lt;- chinstrap %&gt;% 
+  filter(sex == &quot;male&quot;) %&gt;% 
+  pull(body_mass_g)</code></pre>
+<div id="run-t-test-in-a-couple-diff-ways" class="section level3">
+<h3>run t-test in a couple diff ways</h3>
+<ol style="list-style-type: decimal">
+<li>is there a significant difference in body mass between male and female chinstrap penguins? (two-sided)</li>
+</ol>
+<pre class="r"><code>chinstrap_ttest &lt;- t.test(chinstrap_f, chinstrap_m)
+chinstrap_ttest</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  chinstrap_f and chinstrap_m
+## t = -5.2077, df = 62.575, p-value = 2.264e-06
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -569.7903 -253.7391
+## sample estimates:
+## mean of x mean of y 
+##  3527.206  3938.971</code></pre>
+<pre class="r"><code>cohen.d(chinstrap_f, chinstrap_m)</code></pre>
+<pre><code>## 
+## Cohen&#39;s d
+## 
+## d estimate: -1.263061 (large)
+## 95 percent confidence interval:
+##      lower      upper 
+## -1.7933879 -0.7327341</code></pre>
+</div>
+<div id="tiny-p-value-means-that-there-is-a-very-tiny-chance-that-means-are-from-the-same-mean-populations.-there-is-a-significant-difference-between-male-and-female-chinstrap-penguins." class="section level3">
+<h3>tiny p-value means that there is a very tiny chance that means are from the same mean populations. there is a significant difference between male and female chinstrap penguins.</h3>
+<div id="cohens-d-shows-large-effect-size" class="section level4">
+<h4>cohen’s d shows large effect size</h4>
+<p>are male chinstrap penguins significantly larger (body mass) than females (one-tailed)?</p>
+<pre class="r"><code>t.test(chinstrap_m, chinstrap_f, alternative = &quot;greater&quot;)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  chinstrap_m and chinstrap_f
+## t = 5.2077, df = 62.575, p-value = 1.132e-06
+## alternative hypothesis: true difference in means is greater than 0
+## 95 percent confidence interval:
+##  279.7552      Inf
+## sample estimates:
+## mean of x mean of y 
+##  3938.971  3527.206</code></pre>
+</div>
+</div>
 </div>
 
 
