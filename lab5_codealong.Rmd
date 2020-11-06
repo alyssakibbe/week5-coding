@@ -80,6 +80,86 @@ are male chinstrap penguins significantly larger (body mass) than females (one-t
 t.test(chinstrap_m, chinstrap_f, alternative = "greater")
 ```
 
+# One-way ANOVA
+
+## 1. table of countr by species and sex
+```{r}
+penguins_counts <- penguins %>% 
+  count(species, sex)
+
+penguins_counts
+```
+
+```{r}
+penguins_f <- penguins %>% 
+  filter(sex == "female")
+
+ggplot(data = penguins_f, aes(x = flipper_length_mm))+
+  geom_histogram()+
+  facet_wrap(~species)
+
+ggplot(data = penguins_f, aes(sample= flipper_length_mm))+
+  geom_qq()+
+  facet_wrap(~species)
+```
+## find summary stastics
+
+start from penguins_f, create summary table to group by species and returns mean of flipper, sd of slipper, sample size, variance"var", standard error = sd/sqrt(n)
+
+```{r}
+penguins_f_summary <- penguins_f %>% 
+  group_by(species) %>% 
+  summarize(
+      mean_flip = mean(flipper_length_mm),
+      sd_flip = sd(flipper_length_mm),
+      var_flip= var(flipper_length_mm),
+      se = sd(flipper_length_mm)/sqrt(n())
+    )
+
+leveneTest(flipper_length_mm ~ species, data = penguins_f)
+```
+
+### Beeswarm plot with mean +- 1sd
+
+```{r}
+ggplot() + 
+  geom_beeswarm(data = penguins_f, 
+                aes(x = species, y = flipper_length_mm),
+                color = "pink",
+                size = 3) +
+  geom_point(data = penguins_f_summary, aes(x = species, y = mean_flip),
+             size = 4) +
+  geom_errorbar(data = penguins_f_summary,
+                aes(x = species,
+                    ymax = mean_flip + sd_flip,
+                    ymin = mean_flip - sd_flip),
+                width = 0.1)+
+  theme_light()
+```
+
+
+### make the ANOVA
+
+```{r}
+penguin_aov <- aov(flipper_length_mm ~ species, data = penguins_f)
+summary(penguin_aov)
+
+TukeyHSD(penguin_aov)
+```
+
+TYpe III Anova with car package:
+```{r}
+penguin_lm <- lm(flipper_length_mm ~ species, data = penguins_f)
+penguin_aov_t3 <- Anova(penguin_lm, type = "III")
+penguin_aov_t3
+```
+
+
+
+
+
+
+
 
 
 
